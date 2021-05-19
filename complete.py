@@ -45,7 +45,7 @@ for w in contents:
 
 
 # 現在日時の取得
-dt_now = datetime.date.today() #- datetime.timedelta(days = 3)
+dt_now = datetime.date.today() - datetime.timedelta(days = 7)
 print(dt_now)
 #DBにデータ書き込み
 for a,b in zip(te, he):
@@ -76,7 +76,7 @@ for d in result:
 
 
 #エクセル生成
-wbname = "goodlist.xlsx"
+wbname = "testlist.xlsx"
 wb = excel.Workbook()
 ws = wb.active
 wb.create_sheet(title = str(dt_now)) #str()で文字列に変換
@@ -87,6 +87,7 @@ ws = wb[str(dt_now)] #文字列に変換した日付をシート名に格納
 ws["A1"].value = 'タイトル'
 ws["B1"].value = 'URL'
 
+#
 if ws == dt_now:
     #エクセルに書き込み
     for i in range(1, tmp_num):
@@ -94,12 +95,12 @@ if ws == dt_now:
         ws.cell(column=2, row=i+1, value=ul[i-1]) #配列ulの要素をB列に出力
 
 
-    wb.save("goodlist.xlsx")
+    wb.save("testlist.xlsx")
 
 
 
 if ws != dt_now:
-    wbname = "goodlist.xlsx"
+    wbname = "testlist.xlsx"
     wb = excel.load_workbook(wbname)
     ws = wb.active
     wb.create_sheet(title = str(dt_now)) #str()で文字列に変換
@@ -112,7 +113,7 @@ if ws != dt_now:
         ws.cell(column=1, row=i+1, value=titles[i-1]) #配列titlesの要素をA列に出力
         ws.cell(column=2, row=i+1, value=ul[i-1]) #配列ulの要素をB列に出力
 
-    wb.save("goodlist.xlsx")
+    wb.save("testlist.xlsx")
 
 # データベース接続を閉じる
 connection.close()
