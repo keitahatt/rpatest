@@ -38,21 +38,37 @@ tmp_num = 1
 for w in contents:
     titles.append(w.get_text())
     ul.append(w.get('href'))
-
-#for a,b in zip(titles,ul):
-#    cursor.execute("INSERT INTO rpa_data VALUES (?,?);",(a,b))
+    tmp_num += 1
 
 
 for a,b in zip(titles, ul):
     cursor.execute("INSERT INTO rpa_data(title,url) VALUES(%s,%s);",(a,b))
-#cursor.executemany("INSERT INTO rpa_data(title) VALUES (%s,%s)", titles)
-#cursor.executemany("INSERT INTO rpa_data(url) VALUES (%s)", ul)
-# 保存を実行
-
-connection.commit()
 
 # 一覧の表示
+cursor.execute("SELECT * FROM rpa_data")
 
-# 接続を閉じる
+for row in cursor:
+    print(row)
+
+# 保存を実行
+connection.commit()
+
+#エクセルに書き込み
+import openpyxl as excel
+
+wbname = "sports.xlsx"
+wb = excel.Workbook()
+ws = wb.active
+
+ws["A1"].value = 'タイトル'
+ws["B1"].value = 'URL'
+
+
+for i in range(1, tmp_num):
+    ws.cell(column=1, row=i+1, value=titles[i-1]) #配列titlesの要素をA列に出力
+    ws.cell(column=2, row=i+1, value=ul[i-1]) #配列ulの要素をB列に出力
+
+# データベース接続を閉じる
 connection.close()
+wb.save("sports.xlsx")
 
